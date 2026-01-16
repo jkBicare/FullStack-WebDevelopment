@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Coffee Shop Mini System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        .receipt {
+            margin-top: 20px;
+            white-space: pre-line;
+            background: #eee;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>☕ Coffee Shop</h2>
+
+    <p>
+        Products:<br>
+        Cake - ₱120<br>
+        Cookies - ₱50<br>
+        Iced Coffee - ₱69<br>
+        Milk Tea - ₱79
+    </p>
+
+    <button onclick="addOrder()">Add Order</button>
+    <button onclick="checkout()">Checkout</button>
+
+    <div class="receipt" id="receipt"></div>
+</div>
+
+<script>
+    var orders = [];
+
+    function addOrder() {
+        var product = prompt("Enter product name:").toLowerCase();
+        var quantity = Number(prompt("Enter quantity:"));
+
+        var price = getPrice(product);
+
+        if (price === 0) {
+            alert("Invalid product.");
+            return;
+        }
+
+        var total = price * quantity;
+
+        orders.push({
+            product: product,
+            quantity: quantity,
+            price: price,
+            total: total
+        });
+
+        alert("Order added!");
+    }
+
+    function getPrice(product) {
+        if (product === "cake") return 120;
+        if (product === "cookies") return 50;
+        if (product === "iced coffee") return 69;
+        if (product === "milktea" || product === "milk tea") return 79;
+        return 0;
+    }
+
+    function checkout() {
+        if (orders.length === 0) {
+            alert("No orders yet.");
+            return;
+        }
+
+        var receiptText = "--- RECEIPT ---\n";
+        var grandTotal = 0;
+
+        for (var i = 0; i < orders.length; i++) {
+            receiptText +=
+                orders[i].product.toUpperCase() + " x " + orders[i].quantity +
+                " = ₱" + orders[i].total + "\n";
+            grandTotal += orders[i].total;
+        }
+
+        receiptText += "\nTotal: ₱" + grandTotal + "\n";
+
+        var money = Number(prompt("Enter your money:"));
+        var change = money - grandTotal;
+
+        if (change < 0) {
+            alert("Not enough money.");
+            return;
+        }
+
+        receiptText += "Paid: ₱" + money + "\n";
+        receiptText += "Change: ₱" + change + "\n";
+        receiptText += "\nThank you for your purchase! ☕";
+
+        document.getElementById("receipt").textContent = receiptText;
+        orders = [];
+    }
+</script>
+
+</body>
+</html>
